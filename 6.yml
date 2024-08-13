@@ -1,0 +1,14 @@
+---
+- name: Backup DNOS6
+  hosts: dellos6
+  gather_facts: false
+  vars:
+    backup_dir: "/home/semaphore/6"
+  collections:
+    - dellemc.os6
+  tasks:
+    - name: Backup
+      os6_config:
+        backup: yes
+        backup_options:
+          dir_path: "{{ backup_dir }}"
