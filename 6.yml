@@ -3,7 +3,7 @@
   hosts: dellos6
   gather_facts: false
   vars:
-    backup_dir: "/opt/semaphore/6"
+    backup_dir: "/home/semadmin/backups/6"
   collections:
     - dellemc.os6
   tasks:
