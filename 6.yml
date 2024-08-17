@@ -4,11 +4,9 @@
   gather_facts: false
   vars:
     backup_dir: "/home/semadmin/backups/6"
-  collections:
-    - dellemc.os6
   tasks:
     - name: Backup
-      os6_config:
-        backup: yes
+      dellemc.os6.os6_config:
+        backup: true
         backup_options:
           dir_path: "{{ backup_dir }}"
