@@ -1,6 +1,5 @@
 ---
 - name: Backup
-  collections: dellemc.os6
   hosts: dellos6
   gather_facts: false
   vars:
