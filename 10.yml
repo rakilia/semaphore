@@ -1,6 +1,7 @@
 ---
 - name: Backup
   hosts: dellos10
+  connection: paramiko
   gather_facts: false
   vars:
     base_path: "/opt/semaphore/backups/10_OS"
