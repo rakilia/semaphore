@@ -1,0 +1,26 @@
+---
+- name: Create backup folder structure
+  hosts: localhost
+  gather_facts: yes
+
+  vars:
+    base_path: "/opt/semaphore/backup"
+
+  tasks:
+    - name: Get current date
+      set_fact:
+        current_date: "{{ ansible_date_time.date }}"
+        current_month: "{{ ansible_date_time.month }}"
+        current_day: "{{ ansible_date_time.day }}"
+
+    - name: Create month folder if it doesn't exist
+      file:
+        path: "{{ base_path }}/{{ current_month }}"
+        state: directory
+        mode: '0755'
+
+    - name: Create day folder inside month folder
+      file:
+        path: "{{ base_path }}/{{ current_month }}/{{ current_day }}"
+        state: directory
+        mode: '0755'
