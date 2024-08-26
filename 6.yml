@@ -3,10 +3,30 @@
   hosts: dellos6
   gather_facts: false
   vars:
-    backup_dir: "/opt/semaphore/backups/6"
+    base_path: "/opt/semaphore/backup/6"
   collections:
     - dellemc.os6
   tasks:
+    - name: Get current date
+      set_fact:
+        current_date: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
+        current_month: "{{ lookup('pipe', 'date +%B') }}"
+        current_day: "{{ lookup('pipe', 'date +%d') }}"
+      delegate_to: localhost
+
+    - name: Create month folder if it doesn't exist
+      file:
+        path: "{{ base_path }}/{{ current_month }}"
+        state: directory
+        mode: '0755'
+      delegate_to: localhost
+
+    - name: Create day folder inside month folder
+      file:
+        path: "{{ base_path }}/{{ current_month }}/{{ current_day }}"
+        state: directory
+        mode: '0755'
+      delegate_to: localhost
     - name: Backup
       os6_config:
         backup: yes
