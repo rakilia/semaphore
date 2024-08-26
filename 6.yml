@@ -4,9 +4,11 @@
   gather_facts: false
   vars:
     backup_dir: "/opt/semaphore/backups/6"
+  collections:
+    - dellemc.os6
   tasks:
     - name: Backup
-      dellemc.os6.os6_config:
-        backup: true
+      os6_config:
+        backup: yes
         backup_options:
           dir_path: "{{ backup_dir }}"
