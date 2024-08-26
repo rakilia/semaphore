@@ -31,4 +31,4 @@
       os6_config:
         backup: yes
         backup_options:
-          dir_path: "{{ backup_dir }}"
+          dir_path: "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_config.txt"
