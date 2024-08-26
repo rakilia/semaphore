@@ -3,7 +3,7 @@
   hosts: dellos6
   gather_facts: false
   vars:
-    base_path: "/opt/semaphore/backup/6"
+    base_path: "/opt/semaphore/backup/6OS"
   collections:
     - dellemc.os6
   tasks:
