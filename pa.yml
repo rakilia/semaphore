@@ -1,6 +1,8 @@
 ---
 - name: Export Palo configuration and save to a file
   hosts: PA
+  connection: local  # Force local connection, skipping SSH
+  gather_facts: false  # Skip gathering facts, which requires SSH
   vars:
     base_path: "/opt/semaphore/backups/PA"
   tasks:
