@@ -1,5 +1,6 @@
+---
 - name: Export Palo configuration and save to a file
-  hosts: all
+  hosts: PA
   vars:
     base_path: "/opt/semaphore/backups/PA"
   tasks:
@@ -26,8 +27,7 @@
       
 
     - name: Run curl to export configuration and save to a file
-      shell: |
-        curl -k "https://{{ inventory_hostname }}/api/?type=export&category=configuration&key={{ lookup('env', 'API_KEY') }}" -o "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml"
+      command: curl -k "https://{{ inventory_hostname }}/?type=export&category=configuration&key={{ lookup('env', 'API_KEY') }}" -o "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml"
       register: curl_result
 
     - name: Check if the file was created
