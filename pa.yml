@@ -1,5 +1,5 @@
 - name: Export Palo configuration and save to a file
-  hosts: PA
+  hosts: all
   vars:
     base_path: "/opt/semaphore/backups/PA"
   tasks:
