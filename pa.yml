@@ -28,12 +28,10 @@
 
     - name: Set the curl command as a variable
       set_fact:
-        current_curl: >-
-          curl -k "https://{{ inventory_hostname }}/api/?type=export&category=configuration&key={{ lookup('env', 'API_KEY') }}"
-          -o "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml"
+        current_curl: "https://{{ inventory_hostname }}/api/?type=export&category=configuration&key={{ lookup('env', 'API_KEY') }}"
 
     - name: Run curl to export configuration and save to a file
-      shell: "{{ current_curl }}"
+      command: curl -k "{{ current_curl }}" -o "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml"
       register: curl_result
 
     - name: Check if the file was created
@@ -44,4 +42,5 @@
     - name: Show success message
       debug:
         msg: "Palo configuration has been saved to '{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml'"
+      when: file_status.stat.exists
       when: file_status.stat.exists
