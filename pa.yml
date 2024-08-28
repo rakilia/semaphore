@@ -9,7 +9,7 @@
   tasks:
     - name: Get all security rules
       paloaltonetworks.panos.panos_security_rule:
-        provider: "{{ device }}"
+        provider: "{{ PA_A }}"
         gathered_filter: "*"
         state: gathered
       register: sec_rules
