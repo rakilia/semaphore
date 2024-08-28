@@ -31,10 +31,10 @@
 
     - name: Check if the file was created
       stat:
-        path: /opt/semaphore/palo_config.xml
+        path: "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml"
       register: file_status
 
     - name: Show success message
       debug:
-        msg: "Palo configuration has been saved to /opt/semaphore/palo_config.xml"
+        msg: "Palo configuration has been saved to "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml""
       when: file_status.stat.exists
