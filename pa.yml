@@ -26,7 +26,8 @@
       
 
     - name: Run curl to export configuration and save to a file
-      command: curl -k "https://{{ inventory_hostname }}/api/?type=export&category=configuration&key={{ lookup('env', 'API_KEY') }}" -o "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml
+      shell: |
+        curl -k "https://{{ inventory_hostname }}/api/?type=export&category=configuration&key={{ lookup('env', 'API_KEY') }}" -o "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml"
       register: curl_result
 
     - name: Check if the file was created
