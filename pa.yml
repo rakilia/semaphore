@@ -1,14 +1,32 @@
 - name: Export Palo configuration and save to a file
   hosts: localhost
+  vars:
+    base_path: "/opt/semaphore/backups/PA"
   tasks:
-    - name: Ensure /opt/semaphore directory exists
+    - name: Get current date
+      set_fact:
+        current_date: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
+        current_month: "{{ lookup('pipe', 'date +%B') }}"
+        current_day: "{{ lookup('pipe', 'date +%d') }}"
+      delegate_to: localhost
+
+    - name: Create month folder if it doesn't exist
       file:
-        path: /opt/semaphore
+        path: "{{ base_path }}/{{ current_month }}"
         state: directory
         mode: '0755'
+      delegate_to: localhost
+
+    - name: Create day folder inside month folder
+      file:
+        path: "{{ base_path }}/{{ current_month }}/{{ current_day }}"
+        state: directory
+        mode: '0755'
+      delegate_to: localhost
+      
 
     - name: Run curl to export configuration and save to a file
-      command: curl -k "https://10.15.9.10/api/?type=export&category=configuration&key={{ lookup('env', 'API_KEY') }}" -o /opt/semaphore/palo_config.xml
+      command: curl -k "https://10.15.9.10/api/?type=export&category=configuration&key={{ lookup('env', 'API_KEY') }}" -o "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml"
       register: curl_result
 
     - name: Check if the file was created
