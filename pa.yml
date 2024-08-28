@@ -26,8 +26,14 @@
       delegate_to: localhost
       
 
+    - name: Set the curl command as a variable
+      set_fact:
+        current_curl: >-
+          curl -k "https://{{ inventory_hostname }}/api/?type=export&category=configuration&key={{ lookup('env', 'API_KEY') }}"
+          -o "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml"
+
     - name: Run curl to export configuration and save to a file
-      command: curl -k "https://{{ inventory_hostname }}/?type=export&category=configuration&key={{ lookup('env', 'API_KEY') }}" -o "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml"
+      shell: "{{ current_curl }}"
       register: curl_result
 
     - name: Check if the file was created
