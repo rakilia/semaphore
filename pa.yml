@@ -1,18 +1,34 @@
 ---
-- name: Gather security rules
+- name: Export PA configs
   hosts: PA
   connection: local
-
-  collections:
-    - paloaltonetworks.panos
-
+  gather_facts: no
+  strategy: linear
+ 
   tasks:
-    - name: Get all security rules
-      paloaltonetworks.panos.panos_security_rule:
-        gathered_filter: "*"
-        state: gathered
-      register: sec_rules
-
-    - name: Output
-      ansible.builtin.debug:
-        msg: "{{ sec_rules }}"
+    - name: Get REST API Key
+      uri:
+        validate_certs: no
+        url: 'https://{{ ansible_host }}/api/?type=keygen&user={{ pa_rest_user }}&password={{ pa_rest_password }}'
+        return_content: yes
+        method: GET
+      register: response_api_key
+ 
+    - name: Read XML response
+      xml: 
+        content: 'text'
+        xmlstring: '{{ response_api_key.content }}'
+        xpath: '/response/result/key'
+      register: api_key 
+ 
+    - name: Gather config
+      uri:
+        validate_certs: no
+        url: 'https://{{ ansible_host }}/api/?type=config&action=show&key={{ api_key.matches[0].key }}'
+        return_content: yes
+      register: response_pa_config
+ 
+    - name: Save config
+      copy:
+        content: '{{ response_pa_config.content | regex_replace("^<response.*<result>") | regex_replace("</response>/result>$") }}'
+        dest: 'backup/{{ inventory_hostname }}.txt'
