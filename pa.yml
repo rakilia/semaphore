@@ -30,7 +30,7 @@
 
     - name: Set the curl command as a variable
       set_fact:
-        current_curl: "https://{{ inventory_hostname }}/api/?type=export&category=configuration&key={{ lookup('env', 'API_KEY_{{ inventory_hostname }}') }}"
+        current_curl: "https://{{ inventory_hostname }}/api/?type=export&category=configuration&key={{ lookup('env', 'API_KEY_'{{ inventory_hostname }}) }}"
 
     - name: Run curl to export configuration and save to a file
       command: curl -k "{{ current_curl }}" -o "{{ base_path }}/{{ current_month }}/{{ current_day }}/{{ inventory_hostname }}_palo_config.xml"
